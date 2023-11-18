@@ -16,10 +16,10 @@ for workload in ${arr[@]}; do
 		echo "Done cfs_$workload.out"
 	fi
 
-	if ! test -f ./diff_workloads/fifo_centralized_agent_$workload.out.done; then
-		sudo bazel-bin/experiments/scripts/shinjuku.par ghost $workload 10000 151000 10000 fifo_centralized_agent 30s | tee ./diff_workloads/fifo_centralized_agent_$workload.out
-		mv ./diff_workloads/fifo_centralized_agent_$workload.out ./diff_workloads/fifo_centralized_agent_$workload.out.done
-		echo "Done fifo_centralized_agent_$workload.out"
+	if ! test -f ./diff_workloads/fifo_per_cpu_agent_$workload.out.done; then
+		sudo bazel-bin/experiments/scripts/shinjuku.par ghost $workload 10000 151000 10000 fifo_per_cpu_agent 30s | tee ./diff_workloads/fifo_per_cpu_agent_$workload.out
+		mv ./diff_workloads/fifo_per_cpu_agent_$workload.out ./diff_workloads/fifo_per_cpu_agent_$workload.out.done
+		echo "Done fifo_per_cpu_agent_$workload.out"
 	fi
 
 	if ! test -f ./diff_workloads/agent_sol_$workload.out.done; then
