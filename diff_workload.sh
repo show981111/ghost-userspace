@@ -11,7 +11,7 @@ for workload in ${arr[@]}; do
 	fi
 
 	if ! test -f ./diff_workloads/cfs_$workload.out.done; then
-		sudo bazel-bin/experiments/scripts/shinjuku.par cfs $workload 30us 10000 50000 5000 | tee ./diff_workloads/cfs_$workload.out
+		sudo bazel-bin/experiments/scripts/shinjuku.par cfs $workload 30us 10000 151000 10000 | tee ./diff_workloads/cfs_$workload.out
 		mv ./diff_workloads/cfs_$workload.out ./diff_workloads/cfs_$workload.out.done
 		echo "Done cfs_$workload.out"
 	fi
