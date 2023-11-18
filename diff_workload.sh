@@ -23,7 +23,7 @@ for workload in ${arr[@]}; do
 	fi
 
 	if ! test -f ./diff_workloads/agent_sol_$workload.out.done; then
-		sudo bazel-bin/experiments/scripts/centralized_queuing.par ghost $workload 10000 151000 10000 agent_sol 30s | tee ./diff_workloads/agent_sol_$workload.out
+		sudo bazel-bin/experiments/scripts/shinjuku.par ghost $workload 10000 151000 10000 agent_sol 30s | tee ./diff_workloads/agent_sol_$workload.out
 		mv ./diff_workloads/agent_sol_$workload.out ./diff_workloads/agent_sol_$workload.out.done
 		echo "Done agent_sol_$workload.out"
 	fi
