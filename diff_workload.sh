@@ -1,11 +1,11 @@
-arr=("0.3" "0.4" "0.5")
+arr=("0.005")
 
 # 0.005 0.025 0.05 0.07 0.08 0.09 0.1
 
 for workload in ${arr[@]}; do
 	echo "RUN $workload"
 	if ! test -f ./diff_workloads/ghost_$workload.out.done; then
-		sudo bazel-bin/experiments/scripts/shinjuku.par ghost $workload 30us 10000 50000 5000 | tee ./diff_workloads/ghost_$workload.out
+		sudo bazel-bin/experiments/scripts/shinjuku.par ghost $workload 30us 10000 151000 10000 | tee ./diff_workloads/ghost_$workload.out
 		mv ./diff_workloads/ghost_$workload.out ./diff_workloads/ghost_$workload.out.done
 		echo "Done ghost_$workload.out"
 	fi
