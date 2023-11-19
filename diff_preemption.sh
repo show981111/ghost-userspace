@@ -6,10 +6,10 @@ slice=("30us" "60us" "120us" "240us" "480us" )
 for wk in ${wkld[@]}; do
 	for s in ${slice[@]}; do
 		echo "RUN $s"
-		if ! test -f ./diff_wkld_slice/ghost_$wk_$s.out.done; then
-			sudo bazel-bin/experiments/scripts/shinjuku.par ghost $wk  $s 10000 151000 10000 agent_shinjuku 15s | tee ./diff_wkld_slice/ghost_$wk_$s.out
-			mv ./diff_wkld_slice/ghost_$wk_$s.out ./diff_wkld_slice/ghost_$wk_$s.out.done
-			echo "Done ghost_$wk_$s.out"
+		if ! test -f ./diff_wkld_slice/ghost_$wk\_$s.out.done; then
+			sudo bazel-bin/experiments/scripts/shinjuku.par ghost $wk  $s 10000 151000 10000 agent_shinjuku 15s | tee ./diff_wkld_slice/ghost_$wk\_$s.out
+			mv ./diff_wkld_slice/ghost_$wk\_$s.out ./diff_wkld_slice/ghost_$wk\_$s.out.done
+			echo "Done ghost_$wk\_$s.out"
 		fi
 
 		if ! test -f ./diff_wkld_slice/cfs_$wk.out.done; then
