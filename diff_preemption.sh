@@ -1,5 +1,7 @@
-wkld=("0.005" "0.010" "0.020" "0.040" "0.080" "0.16")
-slice=("30us" "60us" "120us" "240us" "480us" )
+# wkld=("0.005" "0.010" "0.020" "0.040" "0.080" "0.16")
+# slice=("30us" "60us" "120us" "240us" "480us" )
+wkld=("0.005")
+slice=("30us")
 
 # 0.005 0.025 0.05 0.07 0.08 0.09 0.1
 
@@ -7,13 +9,13 @@ for wk in ${wkld[@]}; do
 	for s in ${slice[@]}; do
 		echo "RUN $s"
 		if ! test -f ./diff_wkld_slice/ghost_$wk\_$s.out.done; then
-			sudo bazel-bin/experiments/scripts/shinjuku.par ghost $wk  $s 10000 151000 10000 agent_shinjuku 15s | tee ./diff_wkld_slice/ghost_$wk\_$s.out
+			sudo bazel-bin/experiments/scripts/shinjuku.par ghost $wk  $s 10000 301000 10000 agent_shinjuku 15s | tee ./diff_wkld_slice/ghost_$wk\_$s.out
 			mv ./diff_wkld_slice/ghost_$wk\_$s.out ./diff_wkld_slice/ghost_$wk\_$s.out.done
 			echo "Done ghost_$wk\_$s.out"
 		fi
 
 		if ! test -f ./diff_wkld_slice/cfs_$wk.out.done; then
-			sudo bazel-bin/experiments/scripts/shinjuku.par cfs $wk $s 10000 151000 10000 cfs 15s | tee ./diff_wkld_slice/cfs_$wk.out
+			sudo bazel-bin/experiments/scripts/shinjuku.par cfs $wk $s 10000 301000 10000 cfs 15s | tee ./diff_wkld_slice/cfs_$wk.out
 			mv ./diff_wkld_slice/cfs_$wk.out ./diff_wkld_slice/cfs_$wk.out.done
 			echo "Done cfs_$wk.out"
 		fi
