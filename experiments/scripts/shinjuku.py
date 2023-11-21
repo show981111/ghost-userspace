@@ -34,6 +34,8 @@ def RunCfs(ratio: float= 0.005, tput_start: int = 10000, tput_end:int = 151000, 
   # Run throughputs 10000, 20000, 30000, and 40000.
   # e.throughputs = list(i for i in range(10000, 50000, 10000))
   # Toward the end, run throughputs 50000, 51000, 52000, ..., 80000.
+  e.rocksdb.get_duration = '4us'
+  e.rocksdb.range_duration = '10000us'
   e.throughputs = list(i for i in range(tput_start, tput_end, tput_step))
   # e.throughputs.extend(list(i for i in range(50000, 81000, 1000)))
   e.rocksdb = GetRocksDBOptions(Scheduler.CFS, _NUM_CPUS, _NUM_CFS_WORKERS)
@@ -56,6 +58,8 @@ def RunGhost(ratio: float = 0.005, time_slice: str='30us', tput_start: int = 100
   e.rocksdb = GetRocksDBOptions(Scheduler.GHOST, _NUM_CPUS, _NUM_GHOST_WORKERS)
   e.rocksdb.range_query_ratio = ratio
   e.rocksdb.experiment_duration = exp_duration
+  e.rocksdb.get_duration = '4us'
+  e.rocksdb.range_duration = '10000us'
   e.antagonist = None
   e.binaries = GetBinaryPaths()
   e.binaries.ghost = os.path.join(TMPFS_MOUNT, agent)

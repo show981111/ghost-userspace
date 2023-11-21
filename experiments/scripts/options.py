@@ -198,8 +198,8 @@ class RocksDBOptions:
   worker_cpus: List[int] = field(default_factory=GetDefaultRocksDBWorkerCpus)
   cfs_wait_type: CfsWaitType = CfsWaitType.SPIN
   ghost_wait_type: GhostWaitType = GhostWaitType.PRIO_TABLE
-  get_duration: str = "10us"
-  range_duration: str = "5000us"
+  get_duration: str = "10us"    # 4us 
+  range_duration: str = "5000us" # 10000us 
   get_exponential_mean: str = "0us"
   batch: int = 1
   experiment_duration: str = "15s"
