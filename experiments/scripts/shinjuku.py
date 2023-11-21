@@ -39,8 +39,8 @@ def RunCfs(ratio: float= 0.005, tput_start: int = 10000, tput_end:int = 151000, 
   e.rocksdb = GetRocksDBOptions(Scheduler.CFS, _NUM_CPUS, _NUM_CFS_WORKERS)
   e.rocksdb.experiment_duration = exp_duration
   e.rocksdb.range_query_ratio = ratio
-  e.rocksdb.get_duration = '4us'
-  e.rocksdb.range_duration = '10000us'
+  # e.rocksdb.get_duration = '4us'
+  # e.rocksdb.range_duration = '10000us'
   e.antagonist = None
   e.ghost = None
 
@@ -58,8 +58,8 @@ def RunGhost(ratio: float = 0.005, time_slice: str='30us', tput_start: int = 100
   e.rocksdb = GetRocksDBOptions(Scheduler.GHOST, _NUM_CPUS, _NUM_GHOST_WORKERS)
   e.rocksdb.range_query_ratio = ratio
   e.rocksdb.experiment_duration = exp_duration
-  e.rocksdb.get_duration = '4us'
-  e.rocksdb.range_duration = '10000us'
+  # e.rocksdb.get_duration = '4us'
+  # e.rocksdb.range_duration = '10000us'
   e.antagonist = None
   e.binaries = GetBinaryPaths()
   e.binaries.ghost = os.path.join(TMPFS_MOUNT, agent)
