@@ -158,11 +158,12 @@ def parse_experiment_result(filepath: str) -> Experiment:
                     throughput = extract_throughput(lines[i])
                     if throughput is None:
                         raise Exception()
-                    if scheduler == "ghOSt":
+                    if scheduler != "CFS":
                         i += 1
-                        v = int(extract_value(lines[i], "preemption_time_slice"))
-                        if v is not None:
-                            preemption_interval_us = v
+                        if extract_value(lines[i], "preemption_time_slice") != None:
+                            preemption_interval_us = int(
+                                extract_value(lines[i], "preemption_time_slice")
+                            )
                     i += 1
                     range_query_ratio = float(
                         extract_value(lines[i], "range_query_ratio")
@@ -233,8 +234,6 @@ def plot_preemption_stats(
         title = f"{key} vs. Throughput for Different Preemption Intervals, range_query_ratio: {range_query_ratio}"
         if label_format == "ratio":
             title = f"{key} vs. Throughput for Different Range Query Ratio"
-            if scheduler_name == "ghost":
-                title += " preempt: {preemption_interval_us}us"
 
     plt.title(title)
 
@@ -270,17 +269,27 @@ def plot_per_range_query_ratio(dir: str):
 
 
 # diff_interval_test_result = glob.glob("../diff_interval_results/*")
-# diff_interval_test_result = diff_interval_test_result.sort()
-# print(diff_interval_test_result)
+diff_wkld = glob.glob("../diff_policy/*")
+diff_wkld.sort()
 
-# preemption_stats = [parse_experiment_result(file) for file in diff_interval_test_result]
+diff_wkld_res = [parse_experiment_result(file) for file in diff_wkld]
 
-# for item in preemption_stats:
-#     print(
-#         item.scheduler,
-#         item.preemption_interval_us,
-#         item.range_query_ratio,
-#         item.exp_stats,
-#     )
-#     break
-# plot_preemption_stats(preemption_stats, key="latency_99_9pc_us")
+# ghost = []
+# cfs = []
+
+# for item in diff_wkld_res:
+#     if item.scheduler == "CFS":
+#         cfs.append(item)
+#     else :
+#         ghost.append(item)
+
+
+# for item in diff_wkld_res:
+print(diff_wkld_res)
+plot_preemption_stats(
+    diff_wkld_res,
+    key="latency_99_9pc_us",
+    label_format="ratio",
+    title="Latency 99% vs Throughput for CFS & Shinjuku",
+)
+# plot_preemption_stats(ghost, key="latency_99pc_us", label_format = "ratio")
