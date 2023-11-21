@@ -269,10 +269,10 @@ def plot_per_range_query_ratio(dir: str):
 
 
 # diff_interval_test_result = glob.glob("../diff_interval_results/*")
-diff_wkld = glob.glob("../diff_policy/*")
-diff_wkld.sort()
+# diff_wkld = glob.glob("../diff_policy/*")
+# diff_wkld.sort()
 
-diff_wkld_res = [parse_experiment_result(file) for file in diff_wkld]
+# diff_wkld_res = [parse_experiment_result(file) for file in diff_wkld]
 
 # ghost = []
 # cfs = []
@@ -285,11 +285,11 @@ diff_wkld_res = [parse_experiment_result(file) for file in diff_wkld]
 
 
 # for item in diff_wkld_res:
-print(diff_wkld_res)
-plot_preemption_stats(
-    diff_wkld_res,
-    key="latency_99_9pc_us",
-    label_format="ratio",
-    title="Latency 99% vs Throughput for CFS & Shinjuku",
-)
+# print(diff_wkld_res)
+# plot_preemption_stats(
+#     diff_wkld_res,
+#     key="latency_99_9pc_us",
+#     label_format="ratio",
+#     title="Latency 99% vs Throughput for CFS & Shinjuku",
+# )
 # plot_preemption_stats(ghost, key="latency_99pc_us", label_format = "ratio")
