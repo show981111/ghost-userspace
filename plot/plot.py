@@ -183,7 +183,12 @@ def parse_experiment_result(filepath: str) -> Experiment:
     return Experiment(scheduler, preemption_interval_us, range_query_ratio, exp_stats)
 
 
-def plot_preemption_stats(expr_results: list[Experiment], key: str):
+def plot_preemption_stats(
+    expr_results: list[Experiment],
+    key: str,
+    label_format: str = "preemption",
+    title: str = None,
+):
     range_query_ratio = -1
     preemption_interval_us = -1
     for expr in expr_results:
@@ -204,10 +209,13 @@ def plot_preemption_stats(expr_results: list[Experiment], key: str):
             latencies.append(latency)
 
         label = (
-            f"{scheduler_name}_{preemption_interval_us}"
+            f"{scheduler_name}_{preemption_interval_us}us"
             if scheduler_name == "ghOSt"
             else scheduler_name
         )
+
+        if label_format == "ratio":
+            label = f"{scheduler_name}_{round(range_query_ratio*100,2)}%"
 
         # print(scheduler_name, range_query_ratio, pre)
         plt.plot(
@@ -221,12 +229,44 @@ def plot_preemption_stats(expr_results: list[Experiment], key: str):
     plt.xlabel("Throughput (req/s)")
     plt.ylabel(f"{key}")
     plt.legend()
-    plt.title(
-        f"{key} vs. Throughput for Different Preemption Intervals, range_query_ratio: {range_query_ratio}, preempt: {preemption_interval_us}us"
-    )
+    if title == None:
+        title = f"{key} vs. Throughput for Different Preemption Intervals, range_query_ratio: {range_query_ratio}"
+        if label_format == "ratio":
+            title = f"{key} vs. Throughput for Different Range Query Ratio"
+            if scheduler_name == "ghost":
+                title += " preempt: {preemption_interval_us}us"
+
+    plt.title(title)
 
     # Show the plot
     plt.show()
+
+
+def plot_per_range_query_ratio(dir: str):
+    diff_wkld_slice = glob.glob(dir)
+    print(diff_wkld_slice)
+    diff_wkld_slice.sort()
+
+    diff_wkld_slice_res = [parse_experiment_result(file) for file in diff_wkld_slice]
+
+    diff_wkld_dict: dict[float, list] = {}
+    for item in diff_wkld_slice_res:
+        if item.range_query_ratio in diff_wkld_dict.keys():
+            # if item.preemption_interval_us == None or item.preemption_interval_us % 10 == 0:
+            diff_wkld_dict[item.range_query_ratio].append(item)
+        else:
+            diff_wkld_dict[item.range_query_ratio] = [item]
+    # print(diff_preemption_per_range_ratio)
+
+    for key, val in diff_wkld_dict.items():
+        print(key, ":")
+        for item in val:
+            print(item.scheduler, item.preemption_interval_us)
+
+    for key, val in diff_wkld_dict.items():
+        plot_preemption_stats(
+            val, key="latency_99pc_us"
+        )  # latency_99pc_us latency_99_9pc_us
 
 
 # diff_interval_test_result = glob.glob("../diff_interval_results/*")

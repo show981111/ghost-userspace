@@ -1,0 +1,219 @@
+Running CFS experiments...
+Output Directory: /tmp/ghost_data/2023-11-18 00:37:12
+{"throughputs": [10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000], "output_prefix": "/tmp/ghost_data/2023-11-18 00:37:12", "binaries": {"rocksdb": "/dev/shm/rocksdb", "antagonist": "/dev/shm/antagonist", "ghost": "/dev/shm/agent_shinjuku"}, "rocksdb": {"print_format": "pretty", "print_distribution": false, "print_ns": false, "print_get": true, "print_range": true, "rocksdb_db_path": "/dev/shm/orch_db", "throughput": 20000, "range_query_ratio": 0.4, "load_generator_cpus": 10, "cfs_dispatcher_cpus": 11, "num_workers": 6, "worker_cpus": [12, 13, 14, 15, 16, 17], "cfs_wait_type": "spin", "ghost_wait_type": "prio_table", "get_duration": "10us", "range_duration": "5000us", "get_exponential_mean": "0us", "batch": 1, "experiment_duration": "30s", "discard_duration": "2s", "scheduler": "cfs", "ghost_qos": 2}, "antagonist": null, "ghost": null}
+Running experiment for throughput = 10000 req/s:
+['/dev/shm/rocksdb', '--print_format', 'pretty', '--noprint_distribution', '', '--noprint_ns', '', '--print_get', '', '--print_range', '', '--rocksdb_db_path', '/dev/shm/orch_db', '--throughput', '20000', '--range_query_ratio', '0.4', '--load_generator_cpus', '10', '--cfs_dispatcher_cpus', '11', '--num_workers', '6', '--worker_cpus', '12,13,14,15,16,17', '--cfs_wait_type', 'spin', '--ghost_wait_type', 'prio_table', '--get_duration', '10us', '--range_duration', '5000us', '--get_exponential_mean', '0us', '--batch', '1', '--experiment_duration', '30s', '--discard_duration', '2s', '--scheduler', 'cfs', '--ghost_qos', '2', '--throughput', '10000']
+RocksDB Stats:
+Get: 31847
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           31847              1137                   0            0            14110        15114        16992        18475
+Repeatable Handle Time       31847              1137                   6142932      14911199     22535173     22620356     22687683     22703980
+Worker Queue Time            31847              1137                   0            0            1            1            14344        28008
+Worker Handle Time           31847              1137                   10           11           13           18           42           16032
+Total                        31847              1137                   6142944      14911211     22535186     22620368     22687695     22703992
+Range: 20877
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           20877              745                    0            0            14339        15334        16905        18665
+Repeatable Handle Time       20877              745                    6142794      15075979     22552084     22626820     22690074     22703761
+Worker Queue Time            20877              745                    0            0            0            1            7517         27995
+Worker Handle Time           20877              745                    5000         5170         21279        23212        30003        39348
+Total                        20877              745                    6147796      15082059     22557385     22632537     22695112     22720260
+All: 52724
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           52724              1883                   0            0            14180        15192        16978        18665
+Repeatable Handle Time       52724              1883                   6142794      14979183     22540045     22622966     22687683     22703980
+Worker Queue Time            52724              1883                   0            0            1            1            12921        28008
+Worker Handle Time           52724              1883                   10           11           20735        21240        25323        39348
+Total                        52724              1883                   6142944      14980922     22540416     22627551     22690212     22720260
+Running experiment for throughput = 15000 req/s:
+['/dev/shm/rocksdb', '--print_format', 'pretty', '--noprint_distribution', '', '--noprint_ns', '', '--print_get', '', '--print_range', '', '--rocksdb_db_path', '/dev/shm/orch_db', '--throughput', '20000', '--range_query_ratio', '0.4', '--load_generator_cpus', '10', '--cfs_dispatcher_cpus', '11', '--num_workers', '6', '--worker_cpus', '12,13,14,15,16,17', '--cfs_wait_type', 'spin', '--ghost_wait_type', 'prio_table', '--get_duration', '10us', '--range_duration', '5000us', '--get_exponential_mean', '0us', '--batch', '1', '--experiment_duration', '30s', '--discard_duration', '2s', '--scheduler', 'cfs', '--ghost_qos', '2', '--throughput', '15000']
+RocksDB Stats:
+Get: 25807
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           25807              921                    0            0            15586        16814        19580        20959
+Repeatable Handle Time       25807              921                    10308757     17199991     24900735     25065356     25118654     25131636
+Worker Queue Time            25807              921                    0            0            1            9            15993        24009
+Worker Handle Time           25807              921                    10           11           17           23           74           16208
+Total                        25807              921                    10317527     17205976     24900936     25066044     25118670     25131649
+Range: 17372
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           17372              620                    0            0            15493        17267        19787        20777
+Repeatable Handle Time       17372              620                    10307318     17167609     24928475     25065006     25118491     25131584
+Worker Queue Time            17372              620                    0            0            1            5            15995        23855
+Worker Handle Time           17372              620                    5000         5001         19995        20727        26129        47640
+Total                        17372              620                    10322501     17185384     24933477     25070010     25123493     25161143
+All: 43179
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           43179              1542                   0            0            15562        16923        19691        20959
+Repeatable Handle Time       43179              1542                   10307318     17187424     24919589     25065332     25118654     25131636
+Worker Queue Time            43179              1542                   0            0            1            7            15995        24009
+Worker Handle Time           43179              1542                   10           11           19384        19927        23586        47640
+Total                        43179              1542                   10317527     17199800     24920301     25068740     25122966     25161143
+Running experiment for throughput = 20000 req/s:
+['/dev/shm/rocksdb', '--print_format', 'pretty', '--noprint_distribution', '', '--noprint_ns', '', '--print_get', '', '--print_range', '', '--rocksdb_db_path', '/dev/shm/orch_db', '--throughput', '20000', '--range_query_ratio', '0.4', '--load_generator_cpus', '10', '--cfs_dispatcher_cpus', '11', '--num_workers', '6', '--worker_cpus', '12,13,14,15,16,17', '--cfs_wait_type', 'spin', '--ghost_wait_type', 'prio_table', '--get_duration', '10us', '--range_duration', '5000us', '--get_exponential_mean', '0us', '--batch', '1', '--experiment_duration', '30s', '--discard_duration', '2s', '--scheduler', 'cfs', '--ghost_qos', '2', '--throughput', '20000']
+RocksDB Stats:
+Get: 17070
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           17070              609                    0            0            14369        15301        16287        17446
+Repeatable Handle Time       17070              609                    15488466     21104204     26399157     26486620     26551902     26585739
+Worker Queue Time            17070              609                    0            0            1            4            15999        24006
+Worker Handle Time           17070              609                    10           11           16           22           54           16251
+Total                        17070              609                    15488478     21106432     26401202     26489578     26551914     26585751
+Range: 11366
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           11366              405                    0            0            14276        15414        16775        17362
+Repeatable Handle Time       11366              405                    15486125     21180968     26421407     26510088     26576020     26585756
+Worker Queue Time            11366              405                    0            0            1            10           16002        20007
+Worker Handle Time           11366              405                    5001         5099         21240        21688        28599        37422
+Total                        11366              405                    15491265     21197795     26426496     26515246     26581150     26607222
+All: 28436
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           28436              1015                   0            0            14323        15354        16564        17446
+Repeatable Handle Time       28436              1015                   15486125     21133215     26412218     26501151     26571774     26585756
+Worker Queue Time            28436              1015                   0            0            1            7            16002        24006
+Worker Handle Time           28436              1015                   10           11           20279        21205        24572        37422
+Total                        28436              1015                   15488478     21142460     26416468     26505501     26576275     26607222
+Running experiment for throughput = 25000 req/s:
+['/dev/shm/rocksdb', '--print_format', 'pretty', '--noprint_distribution', '', '--noprint_ns', '', '--print_get', '', '--print_range', '', '--rocksdb_db_path', '/dev/shm/orch_db', '--throughput', '20000', '--range_query_ratio', '0.4', '--load_generator_cpus', '10', '--cfs_dispatcher_cpus', '11', '--num_workers', '6', '--worker_cpus', '12,13,14,15,16,17', '--cfs_wait_type', 'spin', '--ghost_wait_type', 'prio_table', '--get_duration', '10us', '--range_duration', '5000us', '--get_exponential_mean', '0us', '--batch', '1', '--experiment_duration', '30s', '--discard_duration', '2s', '--scheduler', 'cfs', '--ghost_qos', '2', '--throughput', '25000']
+RocksDB Stats:
+Get: 0
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           -                  -                      -            -            -            -            -            -
+Repeatable Handle Time       -                  -                      -            -            -            -            -            -
+Worker Queue Time            -                  -                      -            -            -            -            -            -
+Worker Handle Time           -                  -                      -            -            -            -            -            -
+Total                        -                  -                      -            -            -            -            -            -
+Range: 0
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           -                  -                      -            -            -            -            -            -
+Repeatable Handle Time       -                  -                      -            -            -            -            -            -
+Worker Queue Time            -                  -                      -            -            -            -            -            -
+Worker Handle Time           -                  -                      -            -            -            -            -            -
+Total                        -                  -                      -            -            -            -            -            -
+All: 0
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           -                  -                      -            -            -            -            -            -
+Repeatable Handle Time       -                  -                      -            -            -            -            -            -
+Worker Queue Time            -                  -                      -            -            -            -            -            -
+Worker Handle Time           -                  -                      -            -            -            -            -            -
+Total                        -                  -                      -            -            -            -            -            -
+Running experiment for throughput = 30000 req/s:
+['/dev/shm/rocksdb', '--print_format', 'pretty', '--noprint_distribution', '', '--noprint_ns', '', '--print_get', '', '--print_range', '', '--rocksdb_db_path', '/dev/shm/orch_db', '--throughput', '20000', '--range_query_ratio', '0.4', '--load_generator_cpus', '10', '--cfs_dispatcher_cpus', '11', '--num_workers', '6', '--worker_cpus', '12,13,14,15,16,17', '--cfs_wait_type', 'spin', '--ghost_wait_type', 'prio_table', '--get_duration', '10us', '--range_duration', '5000us', '--get_exponential_mean', '0us', '--batch', '1', '--experiment_duration', '30s', '--discard_duration', '2s', '--scheduler', 'cfs', '--ghost_qos', '2', '--throughput', '30000']
+RocksDB Stats:
+Get: 1371
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           1371               48                     0            443          19431        19577        19873        19917
+Repeatable Handle Time       1371               48                     26940232     27497603     27907919     27911054     27934627     27934627
+Worker Queue Time            1371               48                     0            0            1            2            15999        16004
+Worker Handle Time           1371               48                     10           11           14           19           29           45
+Total                        1371               48                     26940372     27497615     27911065     27916021     27942398     27942432
+Range: 930
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           930                33                     0            233          19361        19544        19683        19876
+Repeatable Handle Time       930                33                     26940292     27479196     27907975     27911018     27934627     27934627
+Worker Queue Time            930                33                     0            0            1            1            548          16000
+Worker Handle Time           930                33                     5001         5124         21174        21346        28424        29542
+Total                        930                33                     26945598     27484265     27916936     27921892     27947392     27947673
+All: 2301
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           2301               82                     0            369          19405        19560        19873        19917
+Repeatable Handle Time       2301               82                     26940232     27483402     27907930     27911054     27934627     27934627
+Worker Queue Time            2301               82                     0            0            1            2            15999        16004
+Worker Handle Time           2301               82                     10           11           18982        21165        28271        29542
+Total                        2301               82                     26940372     27488323     27915543     27921050     27942432     27947673
+Running experiment for throughput = 35000 req/s:
+['/dev/shm/rocksdb', '--print_format', 'pretty', '--noprint_distribution', '', '--noprint_ns', '', '--print_get', '', '--print_range', '', '--rocksdb_db_path', '/dev/shm/orch_db', '--throughput', '20000', '--range_query_ratio', '0.4', '--load_generator_cpus', '10', '--cfs_dispatcher_cpus', '11', '--num_workers', '6', '--worker_cpus', '12,13,14,15,16,17', '--cfs_wait_type', 'spin', '--ghost_wait_type', 'prio_table', '--get_duration', '10us', '--range_duration', '5000us', '--get_exponential_mean', '0us', '--batch', '1', '--experiment_duration', '30s', '--discard_duration', '2s', '--scheduler', 'cfs', '--ghost_qos', '2', '--throughput', '35000']
+RocksDB Stats:
+Get: 0
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           -                  -                      -            -            -            -            -            -
+Repeatable Handle Time       -                  -                      -            -            -            -            -            -
+Worker Queue Time            -                  -                      -            -            -            -            -            -
+Worker Handle Time           -                  -                      -            -            -            -            -            -
+Total                        -                  -                      -            -            -            -            -            -
+Range: 0
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           -                  -                      -            -            -            -            -            -
+Repeatable Handle Time       -                  -                      -            -            -            -            -            -
+Worker Queue Time            -                  -                      -            -            -            -            -            -
+Worker Handle Time           -                  -                      -            -            -            -            -            -
+Total                        -                  -                      -            -            -            -            -            -
+All: 0
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           -                  -                      -            -            -            -            -            -
+Repeatable Handle Time       -                  -                      -            -            -            -            -            -
+Worker Queue Time            -                  -                      -            -            -            -            -            -
+Worker Handle Time           -                  -                      -            -            -            -            -            -
+Total                        -                  -                      -            -            -            -            -            -
+Running experiment for throughput = 40000 req/s:
+['/dev/shm/rocksdb', '--print_format', 'pretty', '--noprint_distribution', '', '--noprint_ns', '', '--print_get', '', '--print_range', '', '--rocksdb_db_path', '/dev/shm/orch_db', '--throughput', '20000', '--range_query_ratio', '0.4', '--load_generator_cpus', '10', '--cfs_dispatcher_cpus', '11', '--num_workers', '6', '--worker_cpus', '12,13,14,15,16,17', '--cfs_wait_type', 'spin', '--ghost_wait_type', 'prio_table', '--get_duration', '10us', '--range_duration', '5000us', '--get_exponential_mean', '0us', '--batch', '1', '--experiment_duration', '30s', '--discard_duration', '2s', '--scheduler', 'cfs', '--ghost_qos', '2', '--throughput', '40000']
+RocksDB Stats:
+Get: 0
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           -                  -                      -            -            -            -            -            -
+Repeatable Handle Time       -                  -                      -            -            -            -            -            -
+Worker Queue Time            -                  -                      -            -            -            -            -            -
+Worker Handle Time           -                  -                      -            -            -            -            -            -
+Total                        -                  -                      -            -            -            -            -            -
+Range: 0
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           -                  -                      -            -            -            -            -            -
+Repeatable Handle Time       -                  -                      -            -            -            -            -            -
+Worker Queue Time            -                  -                      -            -            -            -            -            -
+Worker Handle Time           -                  -                      -            -            -            -            -            -
+Total                        -                  -                      -            -            -            -            -            -
+All: 0
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           -                  -                      -            -            -            -            -            -
+Repeatable Handle Time       -                  -                      -            -            -            -            -            -
+Worker Queue Time            -                  -                      -            -            -            -            -            -
+Worker Handle Time           -                  -                      -            -            -            -            -            -
+Total                        -                  -                      -            -            -            -            -            -
+Running experiment for throughput = 45000 req/s:
+['/dev/shm/rocksdb', '--print_format', 'pretty', '--noprint_distribution', '', '--noprint_ns', '', '--print_get', '', '--print_range', '', '--rocksdb_db_path', '/dev/shm/orch_db', '--throughput', '20000', '--range_query_ratio', '0.4', '--load_generator_cpus', '10', '--cfs_dispatcher_cpus', '11', '--num_workers', '6', '--worker_cpus', '12,13,14,15,16,17', '--cfs_wait_type', 'spin', '--ghost_wait_type', 'prio_table', '--get_duration', '10us', '--range_duration', '5000us', '--get_exponential_mean', '0us', '--batch', '1', '--experiment_duration', '30s', '--discard_duration', '2s', '--scheduler', 'cfs', '--ghost_qos', '2', '--throughput', '45000']
+RocksDB Stats:
+Get: 0
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           -                  -                      -            -            -            -            -            -
+Repeatable Handle Time       -                  -                      -            -            -            -            -            -
+Worker Queue Time            -                  -                      -            -            -            -            -            -
+Worker Handle Time           -                  -                      -            -            -            -            -            -
+Total                        -                  -                      -            -            -            -            -            -
+Range: 0
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           -                  -                      -            -            -            -            -            -
+Repeatable Handle Time       -                  -                      -            -            -            -            -            -
+Worker Queue Time            -                  -                      -            -            -            -            -            -
+Worker Handle Time           -                  -                      -            -            -            -            -            -
+Total                        -                  -                      -            -            -            -            -            -
+All: 0
+Stage                        Total Requests     Throughput (req/s)     Min (us)     50% (us)     99% (us)     99.5% (us)   99.9% (us)   Max (us)
+----------------------------------------------------------------------------------------------------------------------------------------------------
+Ingress Queue Time           -                  -                      -            -            -            -            -            -
+Repeatable Handle Time       -                  -                      -            -            -            -            -            -
+Worker Queue Time            -                  -                      -            -            -            -            -            -
+Worker Handle Time           -                  -                      -            -            -            -            -            -
+Total                        -                  -                      -            -            -            -            -            -
