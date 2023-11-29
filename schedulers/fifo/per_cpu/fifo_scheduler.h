@@ -12,6 +12,7 @@
 
 #include "lib/agent.h"
 #include "lib/scheduler.h"
+#include "lib/Profiler.h"
 
 namespace ghost {
 
@@ -35,6 +36,19 @@ struct FifoTask : public Task<> {
   inline bool blocked() const { return run_state == FifoTaskState::kBlocked; }
   inline bool queued() const { return run_state == FifoTaskState::kQueued; }
   inline bool oncpu() const { return run_state == FifoTaskState::kOnCpu; }
+
+  static std::string_view RunStateToString(FifoTask::RunState run_state) {
+    switch (run_state) {
+      case FifoTask::RunState::kBlocked:
+        return "Blocked";
+      case FifoTask::RunState::kQueued:
+        return "Queued";
+      case FifoTask::RunState::kRunnable:
+        return "Runnable";
+      case FifoTask::RunState::kOnCpu:
+        return "OnCpu";
+    }
+  }
 
   // N.B. _runnable() is a transitory state typically used during runqueue
   // manipulation. It is not expected to be used from task msg callbacks.
@@ -89,6 +103,10 @@ class FifoScheduler : public BasicDispatchScheduler<FifoTask> {
   explicit FifoScheduler(Enclave* enclave, CpuList cpulist,
                          std::shared_ptr<TaskAllocator<FifoTask>> allocator);
   ~FifoScheduler() final {}
+
+  void registerProfiler(Profiler *p) {
+    profiler = p;
+  }
 
   void Schedule(const Cpu& cpu, const StatusWord& sw);
 
@@ -150,6 +168,8 @@ class FifoScheduler : public BasicDispatchScheduler<FifoTask> {
 
   CpuState cpu_states_[MAX_CPUS];
   Channel* default_channel_ = nullptr;
+
+  Profiler *profiler;
 };
 
 std::unique_ptr<FifoScheduler> MultiThreadedFifoScheduler(Enclave* enclave,
@@ -172,6 +192,9 @@ class FullFifoAgent : public FullAgent<EnclaveType> {
   explicit FullFifoAgent(AgentConfig config) : FullAgent<EnclaveType>(config) {
     scheduler_ =
         MultiThreadedFifoScheduler(&this->enclave_, *this->enclave_.cpus());
+    if(config.profiler != nullptr){
+      scheduler_->registerProfiler(config.profiler);
+    }
     this->StartAgentTasks();
     this->enclave_.Ready();
   }

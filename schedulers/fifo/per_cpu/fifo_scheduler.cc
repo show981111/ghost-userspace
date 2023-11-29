@@ -106,9 +106,12 @@ void FifoScheduler::TaskNew(FifoTask* task, const Message& msg) {
 
   task->seqnum = msg.seqnum();
   task->run_state = FifoTaskState::kBlocked;
+  profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
 
   if (payload->runnable) {
     task->run_state = FifoTaskState::kRunnable;
+    profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
+
     Cpu cpu = AssignCpu(task);
     Migrate(task, cpu, msg.seqnum());
   } else {
@@ -123,7 +126,7 @@ void FifoScheduler::TaskRunnable(FifoTask* task, const Message& msg) {
 
   CHECK(task->blocked());
   task->run_state = FifoTaskState::kRunnable;
-
+  profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
   // A non-deferrable wakeup gets the same preference as a preempted task.
   // This is because it may be holding locks or resources needed by other
   // tasks to make progress.
@@ -232,6 +235,7 @@ void FifoScheduler::TaskOffCpu(FifoTask* task, bool blocked,
 
   task->run_state =
       blocked ? FifoTaskState::kBlocked : FifoTaskState::kRunnable;
+  profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
 }
 
 void FifoScheduler::TaskOnCpu(FifoTask* task, Cpu cpu) {
@@ -241,6 +245,7 @@ void FifoScheduler::TaskOnCpu(FifoTask* task, Cpu cpu) {
   GHOST_DPRINT(3, stderr, "Task %s oncpu %d", task->gtid.describe(), cpu.id());
 
   task->run_state = FifoTaskState::kOnCpu;
+  profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
   task->cpu = cpu.id();
   task->preempted = false;
   task->prio_boost = false;
@@ -330,6 +335,7 @@ void FifoRq::Enqueue(FifoTask* task) {
   CHECK_EQ(task->run_state, FifoTaskState::kRunnable);
 
   task->run_state = FifoTaskState::kQueued;
+  profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
 
   absl::MutexLock lock(&mu_);
   if (task->prio_boost)
@@ -345,6 +351,7 @@ FifoTask* FifoRq::Dequeue() {
   FifoTask* task = rq_.front();
   CHECK(task->queued());
   task->run_state = FifoTaskState::kRunnable;
+  profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
   rq_.pop_front();
   return task;
 }
@@ -359,6 +366,7 @@ void FifoRq::Erase(FifoTask* task) {
     if (rq_[pos] == task) {
       rq_.erase(rq_.cbegin() + pos);
       task->run_state = FifoTaskState::kRunnable;
+      profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
       return;
     }
 
@@ -367,6 +375,7 @@ void FifoRq::Erase(FifoTask* task) {
       if (rq_[pos] == task) {
         rq_.erase(rq_.cbegin() + pos);
         task->run_state =  FifoTaskState::kRunnable;
+        profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
         return;
       }
     }

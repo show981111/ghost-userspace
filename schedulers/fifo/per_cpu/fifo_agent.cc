@@ -13,17 +13,21 @@
 #include "lib/agent.h"
 #include "lib/enclave.h"
 #include "schedulers/fifo/per_cpu/fifo_scheduler.h"
+#include "Profiler.h"
 
 ABSL_FLAG(std::string, ghost_cpus, "1-5", "cpulist");
 ABSL_FLAG(std::string, enclave, "", "Connect to preexisting enclave directory");
 
 namespace ghost {
 
-static void ParseAgentConfig(AgentConfig* config) {
+static void ParseAgentConfig(AgentConfig* config, Profiler *profiler = nullptr) {
   CpuList ghost_cpus =
       MachineTopology()->ParseCpuStr(absl::GetFlag(FLAGS_ghost_cpus));
   CHECK(!ghost_cpus.Empty());
 
+  if(profiler != nullptr){
+    config->profiler = profiler;
+  }
   Topology* topology = MachineTopology();
   config->topology_ = topology;
   config->cpus_ = ghost_cpus;
@@ -42,14 +46,15 @@ int main(int argc, char* argv[]) {
   absl::ParseCommandLine(argc, argv);
 
   ghost::AgentConfig config;
-  ghost::ParseAgentConfig(&config);
+  Profiler profiler;
+  ghost::ParseAgentConfig(&config, &profiler);
 
   printf("Initializing...\n");
 
   // Using new so we can destruct the object before printing Done
   auto uap = new ghost::AgentProcess<ghost::FullFifoAgent<ghost::LocalEnclave>,
                                      ghost::AgentConfig>(config);
-
+  
   ghost::GhostHelper()->InitCore();
   printf("Initialization complete, ghOSt active.\n");
   // When `stdout` is directed to a terminal, it is newline-buffered. When
@@ -78,6 +83,8 @@ int main(int argc, char* argv[]) {
   });
 
   exit.WaitForNotification();
+
+  profiler.PrintResults();
 
   delete uap;
 
