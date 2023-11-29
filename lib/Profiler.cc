@@ -11,7 +11,7 @@ namespace ghost
     switch (currentState)
     {
     case TaskState::kBlocked:
-      blockedTime += d;
+      blockTime += d;
       break;
     case TaskState::kRunnable:
       runnableTime += d;
@@ -38,7 +38,7 @@ namespace ghost
 
     if (metrics.count(rawTid) == 0)
       metrics.insert({rawTid, Metric(absl::Now())});
-    metrics[rawTid].updateState(newState);
+    metrics[rawTid].updateState(getStateFromString(newState));
 
     if (state == TaskState::kDied)
     {
@@ -67,7 +67,8 @@ namespace ghost
       fprintf(stdout, "Ghost Thread Id: %" PRId64 "\n", res.gtid.id());
       //    time_t unixTime = absl::ToUnixSeconds(currentTime);
       fprintf(stdout, "BlockTime: %" PRId64 "\nRunnableTime: %" PRId64 "\nQueuedTime: %" PRId64 "\nonCpuTime: %" PRId64 "\nyieldingTime: %" PRId64 "\n",
-              res.metric.blockTime, res.metric.runnableTime, res.metric.queuedTime, res.metric.onCpuTime, res.metric.yieldingTime);
+              absl::ToNanoseconds(res.metric.blockTime), absl::ToNanoseconds(res.metric.runnableTime), absl::ToNanoseconds(res.metric.queuedTime),
+              absl::ToNanoseconds(res.metric.onCpuTime), absl::ToNanoseconds(res.metric.yieldingTime));
       fprintf(stdout, "CreatedAt: %" PRId64 ", DiedAt: %" PRId64 "\n", absl::ToUnixSeconds(res.metric.createdAt), absl::ToUnixSeconds(res.metric.diedAt));
       fprintf(stdout, "---------------------------------\n");
     }
