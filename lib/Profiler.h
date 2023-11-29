@@ -42,7 +42,7 @@ namespace ghost
 
             Metric();
             Metric(absl::Time _createdAt) : createdAt(_createdAt), currentState(TaskState::kCreated), stateStarted(_createdAt) {}
-            void updateState(const Profiler::TaskState &newState, const absl::Duration d);
+            void updateState(const Profiler::TaskState &newState);
         };
         void update(Gtid gtid, std::string_view newState);
         void PrintResults();

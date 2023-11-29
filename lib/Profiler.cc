@@ -1,4 +1,6 @@
 #include "lib/Profiler.h"
+#include <inttypes.h>
+#include <stdio.h>
 
 namespace ghost
 {
@@ -34,13 +36,13 @@ namespace ghost
     TaskState state = getStateFromString(newState);
     int64_t rawTid = gtid.id();
 
-    if (metrics.count(rawTid)) == 0)
-    metrics.insert({rawTid, Metric(absl::Now())});
-    metrics[rawTid].updateTime(newState);
+    if (metrics.count(rawTid) == 0)
+      metrics.insert({rawTid, Metric(absl::Now())});
+    metrics[rawTid].updateState(newState);
 
     if (state == TaskState::kDied)
     {
-      results.emplace_back(Profiler::Result{rawTid, metrics[rawTid]});
+      results.emplace_back(Profiler::Result{gtid, metrics[rawTid]});
       metrics.erase(rawTid);
     }
   }
