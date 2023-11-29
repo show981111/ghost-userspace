@@ -67,8 +67,8 @@ namespace ghost
       fprintf(stdout, "Ghost Thread Id: %" PRId64 "\n", res.gtid.id());
       //    time_t unixTime = absl::ToUnixSeconds(currentTime);
       fprintf(stdout, "BlockTime: %" PRId64 "\nRunnableTime: %" PRId64 "\nQueuedTime: %" PRId64 "\nonCpuTime: %" PRId64 "\nyieldingTime: %" PRId64 "\n",
-              absl::ToNanoseconds(res.metric.blockTime), absl::ToNanoseconds(res.metric.runnableTime), absl::ToNanoseconds(res.metric.queuedTime),
-              absl::ToNanoseconds(res.metric.onCpuTime), absl::ToNanoseconds(res.metric.yieldingTime));
+              absl::ToInt64Nanoseconds(res.metric.blockTime), absl::ToInt64Nanoseconds(res.metric.runnableTime), absl::ToInt64Nanoseconds(res.metric.queuedTime),
+              absl::ToInt64Nanoseconds(res.metric.onCpuTime), absl::ToInt64Nanoseconds(res.metric.yieldingTime));
       fprintf(stdout, "CreatedAt: %" PRId64 ", DiedAt: %" PRId64 "\n", absl::ToUnixSeconds(res.metric.createdAt), absl::ToUnixSeconds(res.metric.diedAt));
       fprintf(stdout, "---------------------------------\n");
     }
