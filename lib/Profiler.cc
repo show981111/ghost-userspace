@@ -63,7 +63,7 @@ void Profiler::PrintResults()
     //    time_t unixTime = absl::ToUnixSeconds(currentTime);
     fprintf(stdout, "BlockTime: %" PRId64 "\nRunnableTime: %" PRId64 "\nQueuedTime: %" PRId64 "\nonCpuTime: %" PRId64 "\nyieldingTime: %" PRId64 "\n",
             res.metric.blockTime, res.metric.runnableTime, res.metric.queuedTime, res.metric.onCpuTime, res.metric.yieldingTime);
-    fprintf(stdout, "CreatedAt: %lld, DiedAt: %lld\n", absl::ToUnixSeconds(res.metric.createdAt), absl::ToUnixSeconds(res.metric.diedAt));
+    fprintf(stdout, "CreatedAt: %" PRId64 ", DiedAt: %" PRId64 "\n", absl::ToUnixSeconds(res.metric.createdAt), absl::ToUnixSeconds(res.metric.diedAt));
     fprintf(stdout, "---------------------------------\n");
   }
 
