@@ -56,7 +56,7 @@ class AgentConfig {
   // by setting this option to true.
   bool mlockall_ = false;
 
-  Profiler* profiler;
+  Profiler* profiler = nullptr;
   explicit AgentConfig(Topology* topology = nullptr,
                        CpuList cpus = MachineTopology()->EmptyCpuList())
       : topology_(topology), cpus_(std::move(cpus)) {}
