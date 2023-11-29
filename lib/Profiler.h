@@ -41,11 +41,11 @@ public:
         Metric(absl::Time _createdAt) : createdAt(_createdAt), currentState(TaskState::kCreated), stateStarted(_createdAt) {}
         void updateState(const Profiler::TaskState &newState, const absl::Duration d);
     };
-    void update(Gtid gtid, const std::string_view &newState);
+    void update(Gtid gtid, std::string_view newState);
     void PrintResults();
 
 private:
-    static TaskState getStateFromString(const std::string_view &state);
+    static TaskState getStateFromString(std::string_view state);
     absl::flat_hash_map<int64_t, Metric> metrics;
 
     struct Result

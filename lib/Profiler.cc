@@ -1,4 +1,4 @@
-#include "Profiler.h"
+#include "lib/Profiler.h"
 
 void Profiler::Metric::updateState(const Profiler::TaskState &newState)
 {
@@ -27,7 +27,7 @@ void Profiler::Metric::updateState(const Profiler::TaskState &newState)
   currentState = newState;
 }
 
-void Profiler::update(Gtid gtid, const std::string_view &newState)
+void Profiler::update(Gtid gtid, std::string_view newState)
 {
   TaskState state = getStateFromString(newState);
 
@@ -70,21 +70,21 @@ void Profiler::PrintResults()
   fprintf(stdout, "=================================\n");
 }
 
-TaskState Profiler::getStateFromString(const std::string_view &state)
+Profiler::TaskState Profiler::getStateFromString(std::string_view state)
 {
   if (state == "Blocked")
-    return TaskState::kBlocked;
+    return Profiler::TaskState::kBlocked;
   else if (state == "Runnable")
-    return TaskState::kRunnable;
+    return Profiler::TaskState::kRunnable;
   else if (state == "Queued")
-    return TaskState::kQueued;
+    return Profiler::TaskState::kQueued;
   else if (state == "onCpu")
-    return TaskState::kOnCpu;
+    return Profiler::TaskState::kOnCpu;
   else if (state == "yielding")
-    return TaskState::kYielding;
+    return Profiler::TaskState::kYielding;
   else
   {
     fprintf(stderr, "Task state is unknown(%s)\n", state);
-    return TaskState::unknown;
+    return Profiler::TaskState::unknown;
   }
 }
