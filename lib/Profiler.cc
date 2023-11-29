@@ -30,15 +30,16 @@ void Profiler::Metric::updateState(const Profiler::TaskState &newState)
 void Profiler::update(Gtid gtid, std::string_view newState)
 {
   TaskState state = getStateFromString(newState);
+  int64_t rawTid = gtid.id();
 
-  if (metrics.count(gtid) == 0)
-    metrics.insert({gtid, Metric(absl::Now())});
-  metrics[gtid].updateTime(newState);
+  if (metrics.count(rawTid)) == 0)
+    metrics.insert({rawTid, Metric(absl::Now())});
+  metrics[rawTid].updateTime(newState);
 
   if (state == TaskState::kDied)
   {
-    results.emplace_back(Profiler::Result{gtid, metrics[gtid]});
-    metrics.erase(gtid);
+    results.emplace_back(Profiler::Result{rawTid, metrics[rawTid]});
+    metrics.erase(rawTid);
   }
 }
 
@@ -59,7 +60,7 @@ void Profiler::PrintResults()
 
   for (auto &res : results)
   {
-    fprintf(stdout, "Ghost Thread Id: %d\n", res.gtid);
+    fprintf(stdout, "Ghost Thread Id: %" PRId64 "\n", res.gtid.id());
     //    time_t unixTime = absl::ToUnixSeconds(currentTime);
     fprintf(stdout, "BlockTime: %" PRId64 "\nRunnableTime: %" PRId64 "\nQueuedTime: %" PRId64 "\nonCpuTime: %" PRId64 "\nyieldingTime: %" PRId64 "\n",
             res.metric.blockTime, res.metric.runnableTime, res.metric.queuedTime, res.metric.onCpuTime, res.metric.yieldingTime);
@@ -84,7 +85,7 @@ Profiler::TaskState Profiler::getStateFromString(std::string_view state)
     return Profiler::TaskState::kYielding;
   else
   {
-    fprintf(stderr, "Task state is unknown(%s)\n", state);
+    fprintf(stderr, "Task state is unknown(%s)\n", state.data());
     return Profiler::TaskState::unknown;
   }
 }
