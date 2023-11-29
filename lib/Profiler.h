@@ -5,6 +5,7 @@
 #include "absl/time/clock.h"
 #include "absl/time/time.h"
 #include "lib/scheduler.h"
+#include "lib/ghost.h"
 
 #include <vector>
 class Profiler
