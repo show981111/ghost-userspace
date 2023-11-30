@@ -84,7 +84,7 @@ namespace ghost
       return Profiler::TaskState::kRunnable;
     else if (state == "Queued")
       return Profiler::TaskState::kQueued;
-    else if (state == "onCpu")
+    else if (state == "OnCpu")
       return Profiler::TaskState::kOnCpu;
     else if (state == "yielding")
       return Profiler::TaskState::kYielding;

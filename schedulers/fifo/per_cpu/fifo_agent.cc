@@ -46,8 +46,8 @@ int main(int argc, char* argv[]) {
   absl::ParseCommandLine(argc, argv);
 
   ghost::AgentConfig config;
-  ghost::Profiler profiler;
-  ghost::ParseAgentConfig(&config, &profiler);
+  ghost::Profiler* profiler = new ghost::Profiler;
+  ghost::ParseAgentConfig(&config, profiler);
 
   printf("Initializing...\n");
 
@@ -85,7 +85,8 @@ int main(int argc, char* argv[]) {
   exit.WaitForNotification();
 
   profiler.PrintResults();
-
+  
+  delete profiler;
   delete uap;
 
   printf("\nDone!\n");
