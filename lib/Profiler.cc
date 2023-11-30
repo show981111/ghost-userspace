@@ -38,7 +38,6 @@ namespace ghost
 
     if (metrics.count(rawTid) == 0)
     {
-      fprintf(stdout, "Inserting %lld\n", rawTid);
       metrics.insert({rawTid, Metric(absl::Now())});
     }
     metrics[rawTid].updateState(getStateFromString(newState));
