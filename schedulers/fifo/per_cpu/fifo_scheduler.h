@@ -102,7 +102,9 @@ class FifoScheduler : public BasicDispatchScheduler<FifoTask> {
  public:
   explicit FifoScheduler(Enclave* enclave, CpuList cpulist,
                          std::shared_ptr<TaskAllocator<FifoTask>> allocator);
-  ~FifoScheduler() final {}
+  ~FifoScheduler() final {
+    profiler->PrintResults();
+  }
 
   void registerProfiler(Profiler *p) {
     profiler = p;
