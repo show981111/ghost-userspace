@@ -84,8 +84,8 @@ int main(int argc, char* argv[]) {
 
   exit.WaitForNotification();
 
-  profiler.PrintResults();
-  
+  profiler->PrintResults();
+
   delete profiler;
   delete uap;
 
