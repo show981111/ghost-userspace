@@ -40,7 +40,7 @@ namespace ghost
             TaskState currentState;
             absl::Time stateStarted;
 
-            Metric();
+            Metric() {};
             Metric(absl::Time _createdAt) : createdAt(_createdAt), currentState(TaskState::kCreated), stateStarted(_createdAt) {}
             void updateState(const Profiler::TaskState &newState);
         };
