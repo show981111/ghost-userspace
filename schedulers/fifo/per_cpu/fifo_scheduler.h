@@ -37,15 +37,15 @@ struct FifoTask : public Task<> {
   inline bool queued() const { return run_state == FifoTaskState::kQueued; }
   inline bool oncpu() const { return run_state == FifoTaskState::kOnCpu; }
 
-  static std::string_view RunStateToString(FifoTask::RunState run_state) {
+  static std::string_view RunStateToString(const FifoTaskState run_state) {
     switch (run_state) {
-      case FifoTask::RunState::kBlocked:
+      case FifoTaskState::kBlocked:
         return "Blocked";
-      case FifoTask::RunState::kQueued:
+      case FifoTaskState::kQueued:
         return "Queued";
-      case FifoTask::RunState::kRunnable:
+      case FifoTaskState::kRunnable:
         return "Runnable";
-      case FifoTask::RunState::kOnCpu:
+      case FifoTaskState::kOnCpu:
         return "OnCpu";
     }
   }
