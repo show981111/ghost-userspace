@@ -330,7 +330,7 @@ void FifoScheduler::Schedule(const Cpu& cpu, const StatusWord& agent_sw) {
   FifoSchedule(cpu, agent_barrier, agent_sw.boosted_priority());
 }
 
-void FifoRq::Enqueue(FifoTask* task, Profiler* profiler = nullptr) {
+void FifoRq::Enqueue(FifoTask* task, Profiler* profiler) {
   CHECK_GE(task->cpu, 0);
   CHECK_EQ(task->run_state, FifoTaskState::kRunnable);
 
@@ -345,7 +345,7 @@ void FifoRq::Enqueue(FifoTask* task, Profiler* profiler = nullptr) {
     rq_.push_back(task);
 }
 
-FifoTask* FifoRq::Dequeue(Profiler* profiler = nullptr) {
+FifoTask* FifoRq::Dequeue(Profiler* profiler) {
   absl::MutexLock lock(&mu_);
   if (rq_.empty()) return nullptr;
 
@@ -358,7 +358,7 @@ FifoTask* FifoRq::Dequeue(Profiler* profiler = nullptr) {
   return task;
 }
 
-void FifoRq::Erase(FifoTask* task,Profiler* profiler = nullptr) {
+void FifoRq::Erase(FifoTask* task,Profiler* profiler) {
   CHECK_EQ(task->run_state, FifoTaskState::kQueued);
   absl::MutexLock lock(&mu_);
   size_t size = rq_.size();
