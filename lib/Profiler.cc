@@ -4,7 +4,7 @@
 
 namespace ghost
 {
-  void Profiler::Metric::updateState(const Profiler::TaskState &newState)
+  void Profiler::Metric::updateState(const Profiler::TaskState newState)
   {
     absl::Time currentTime = absl::Now();
     absl::Duration d = currentTime - stateStarted;
