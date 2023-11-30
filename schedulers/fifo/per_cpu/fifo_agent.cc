@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
   absl::ParseCommandLine(argc, argv);
 
   ghost::AgentConfig config;
-  Profiler profiler;
+  ghost::Profiler profiler;
   ghost::ParseAgentConfig(&config, &profiler);
 
   printf("Initializing...\n");
