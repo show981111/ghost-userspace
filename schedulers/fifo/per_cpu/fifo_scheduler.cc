@@ -94,7 +94,7 @@ void FifoScheduler::Migrate(FifoTask* task, Cpu cpu, BarrierToken seqnum) {
 
   // Make task visible in the new runqueue *after* changing the association
   // (otherwise the task can get oncpu while producing into the old queue).
-  cs->run_queue.Enqueue(task);
+  cs->run_queue.Enqueue(task, profiler);
 
   // Get the agent's attention so it notices the new task.
   enclave()->GetAgent(cpu)->Ping();
@@ -140,7 +140,7 @@ void FifoScheduler::TaskRunnable(FifoTask* task, const Message& msg) {
     Migrate(task, cpu, msg.seqnum());
   } else {
     CpuState* cs = cpu_state_of(task);
-    cs->run_queue.Enqueue(task);
+    cs->run_queue.Enqueue(task, profiler);
   }
 }
 
@@ -152,7 +152,7 @@ void FifoScheduler::TaskDeparted(FifoTask* task, const Message& msg) {
     TaskOffCpu(task, /*blocked=*/false, payload->from_switchto);
   } else if (task->queued()) {
     CpuState* cs = cpu_state_of(task);
-    cs->run_queue.Erase(task);
+    cs->run_queue.Erase(task, this->profiler);
   } else {
     CHECK(task->blocked());
   }
@@ -177,7 +177,7 @@ void FifoScheduler::TaskYield(FifoTask* task, const Message& msg) {
   TaskOffCpu(task, /*blocked=*/false, payload->from_switchto);
 
   CpuState* cs = cpu_state_of(task);
-  cs->run_queue.Enqueue(task);
+  cs->run_queue.Enqueue(task, profiler);
 
   if (payload->from_switchto) {
     Cpu cpu = topology()->cpu(payload->cpu);
@@ -206,7 +206,7 @@ void FifoScheduler::TaskPreempted(FifoTask* task, const Message& msg) {
   task->preempted = true;
   task->prio_boost = true;
   CpuState* cs = cpu_state_of(task);
-  cs->run_queue.Enqueue(task);
+  cs->run_queue.Enqueue(task, this->profiler);
 
   if (payload->from_switchto) {
     Cpu cpu = topology()->cpu(payload->cpu);
@@ -257,7 +257,7 @@ void FifoScheduler::FifoSchedule(const Cpu& cpu, BarrierToken agent_barrier,
   FifoTask* next = nullptr;
   if (!prio_boost) {
     next = cs->current;
-    if (!next) next = cs->run_queue.Dequeue();
+    if (!next) next = cs->run_queue.Dequeue(this->profiler);
   }
 
   GHOST_DPRINT(3, stderr, "FifoSchedule %s on %s cpu %d ",
@@ -301,7 +301,7 @@ void FifoScheduler::FifoSchedule(const Cpu& cpu, BarrierToken agent_barrier,
 
       // Txn commit failed so push 'next' to the front of runqueue.
       next->prio_boost = true;
-      cs->run_queue.Enqueue(next);
+      cs->run_queue.Enqueue(next, this->profiler);
     }
   } else {
     // If LocalYield is due to 'prio_boost' then instruct the kernel to
@@ -330,12 +330,13 @@ void FifoScheduler::Schedule(const Cpu& cpu, const StatusWord& agent_sw) {
   FifoSchedule(cpu, agent_barrier, agent_sw.boosted_priority());
 }
 
-void FifoRq::Enqueue(FifoTask* task) {
+void FifoRq::Enqueue(FifoTask* task, Profiler* profiler = nullptr) {
   CHECK_GE(task->cpu, 0);
   CHECK_EQ(task->run_state, FifoTaskState::kRunnable);
 
   task->run_state = FifoTaskState::kQueued;
-  profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
+  if(profiler != nullptr)
+    profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
 
   absl::MutexLock lock(&mu_);
   if (task->prio_boost)
@@ -344,19 +345,20 @@ void FifoRq::Enqueue(FifoTask* task) {
     rq_.push_back(task);
 }
 
-FifoTask* FifoRq::Dequeue() {
+FifoTask* FifoRq::Dequeue(Profiler* profiler = nullptr) {
   absl::MutexLock lock(&mu_);
   if (rq_.empty()) return nullptr;
 
   FifoTask* task = rq_.front();
   CHECK(task->queued());
   task->run_state = FifoTaskState::kRunnable;
-  profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
+  if(profiler != nullptr)
+    profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
   rq_.pop_front();
   return task;
 }
 
-void FifoRq::Erase(FifoTask* task) {
+void FifoRq::Erase(FifoTask* task,Profiler* profiler = nullptr) {
   CHECK_EQ(task->run_state, FifoTaskState::kQueued);
   absl::MutexLock lock(&mu_);
   size_t size = rq_.size();
@@ -366,7 +368,8 @@ void FifoRq::Erase(FifoTask* task) {
     if (rq_[pos] == task) {
       rq_.erase(rq_.cbegin() + pos);
       task->run_state = FifoTaskState::kRunnable;
-      profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
+      if(profiler != nullptr)
+        profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
       return;
     }
 
@@ -375,7 +378,8 @@ void FifoRq::Erase(FifoTask* task) {
       if (rq_[pos] == task) {
         rq_.erase(rq_.cbegin() + pos);
         task->run_state =  FifoTaskState::kRunnable;
-        profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
+        if(profiler != nullptr)
+          profiler->update(task->gtid, FifoTask::RunStateToString(task->run_state));
         return;
       }
     }

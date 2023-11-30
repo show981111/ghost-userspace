@@ -77,14 +77,14 @@ class FifoRq {
   FifoRq(const FifoRq&) = delete;
   FifoRq& operator=(FifoRq&) = delete;
 
-  FifoTask* Dequeue();
-  void Enqueue(FifoTask* task);
+  FifoTask* Dequeue(Profiler* profiler = nullptr);
+  void Enqueue(FifoTask* task, Profiler* profiler = nullptr);
 
   // Erase 'task' from the runqueue.
   //
   // Caller must ensure that 'task' is on the runqueue in the first place
   // (e.g. via task->queued()).
-  void Erase(FifoTask* task);
+  void Erase(FifoTask* task, Profiler* profiler = nullptr);
 
   size_t Size() const {
     absl::MutexLock lock(&mu_);
@@ -169,7 +169,7 @@ class FifoScheduler : public BasicDispatchScheduler<FifoTask> {
   CpuState cpu_states_[MAX_CPUS];
   Channel* default_channel_ = nullptr;
 
-  Profiler *profiler;
+  Profiler *profiler = nullptr;
 };
 
 std::unique_ptr<FifoScheduler> MultiThreadedFifoScheduler(Enclave* enclave,
