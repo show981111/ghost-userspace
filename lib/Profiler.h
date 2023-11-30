@@ -7,7 +7,7 @@
 #include "lib/base.h"
 
 #include <vector>
-
+#include <mutex>
 namespace ghost
 {
     class Profiler
