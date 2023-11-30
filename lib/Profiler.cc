@@ -38,13 +38,14 @@ namespace ghost
 
     if (metrics.count(rawTid) == 0)
     {
-      metrics.insert({rawTid, Metric(absl::Now())});
+      auto pair = std::make_pair(rawTid, Metric(absl::Now()));
+      metrics.insert(pair);
     }
     metrics[rawTid].updateState(getStateFromString(newState));
 
     if (state == TaskState::kDied)
     {
-      results.emplace_back(Profiler::Result{gtid, metrics[rawTid]});
+      results.push_back(Profiler::Result{gtid, metrics[rawTid]});
       metrics.erase(rawTid);
     }
   }
