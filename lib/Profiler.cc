@@ -33,6 +33,7 @@ namespace ghost
 
   void Profiler::update(Gtid gtid, std::string_view newState)
   {
+    m.lock();
     TaskState state = getStateFromString(newState);
     int64_t rawTid = gtid.id();
 
@@ -43,6 +44,7 @@ namespace ghost
       results.push_back(Profiler::Result{gtid, metrics[rawTid]});
       metrics.erase(rawTid);
     }
+    m.unlock();
   }
 
   void Profiler::PrintResults()

@@ -60,6 +60,7 @@ namespace ghost
         };
 
         std::vector<Profiler::Result> results;
+        std::mutex m;
     };
 }
 #endif
