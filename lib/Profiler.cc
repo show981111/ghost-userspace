@@ -36,11 +36,6 @@ namespace ghost
     TaskState state = getStateFromString(newState);
     int64_t rawTid = gtid.id();
 
-    if (metrics.count(rawTid) == 0)
-    {
-      auto pair = std::make_pair(rawTid, Metric(absl::Now()));
-      metrics.insert(pair);
-    }
     metrics[rawTid].updateState(getStateFromString(newState));
 
     if (state == TaskState::kDied)
