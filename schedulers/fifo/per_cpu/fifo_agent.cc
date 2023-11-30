@@ -13,7 +13,7 @@
 #include "lib/agent.h"
 #include "lib/enclave.h"
 #include "schedulers/fifo/per_cpu/fifo_scheduler.h"
-#include "Profiler.h"
+#include "lib/Profiler.h"
 
 ABSL_FLAG(std::string, ghost_cpus, "1-5", "cpulist");
 ABSL_FLAG(std::string, enclave, "", "Connect to preexisting enclave directory");
