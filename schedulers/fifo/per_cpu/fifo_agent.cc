@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
   fflush(stdout);
 
   sleep(15);
-  profiler->PrintResults();
+  profiler->PrintResults(stdout);
 
   ghost::Notification exit;
   ghost::GhostSignals::AddHandler(SIGINT, [&exit](int) {

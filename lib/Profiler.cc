@@ -47,7 +47,7 @@ namespace ghost
     m.unlock();
   }
 
-  void Profiler::PrintResults()
+  void Profiler::PrintResults(FILE *to)
   {
     //   absl::Time createdAt;        // created time
     // absl::Duration blockTime;    // Blocked state
@@ -60,20 +60,20 @@ namespace ghost
 
     // TaskState currentState;
     // absl::Time stateStarted;
-    fprintf(stdout, "=================================\n");
+    fprintf(to, "=================================\n");
 
     for (auto &res : results)
     {
-      fprintf(stdout, "Ghost Thread Id: %" PRId64 "\n", res.gtid.id());
+      fprintf(to, "Ghost Thread Id: %" PRId64 "\n", res.gtid.id());
       //    time_t unixTime = absl::ToUnixSeconds(currentTime);
-      fprintf(stdout, "BlockTime: %" PRId64 "\nRunnableTime: %" PRId64 "\nQueuedTime: %" PRId64 "\nonCpuTime: %" PRId64 "\nyieldingTime: %" PRId64 "\n",
+      fprintf(to, "BlockTime: %" PRId64 "\nRunnableTime: %" PRId64 "\nQueuedTime: %" PRId64 "\nonCpuTime: %" PRId64 "\nyieldingTime: %" PRId64 "\n",
               absl::ToInt64Nanoseconds(res.metric.blockTime), absl::ToInt64Nanoseconds(res.metric.runnableTime), absl::ToInt64Nanoseconds(res.metric.queuedTime),
               absl::ToInt64Nanoseconds(res.metric.onCpuTime), absl::ToInt64Nanoseconds(res.metric.yieldingTime));
-      fprintf(stdout, "CreatedAt: %" PRId64 ", DiedAt: %" PRId64 "\n", absl::ToUnixSeconds(res.metric.createdAt), absl::ToUnixSeconds(res.metric.diedAt));
-      fprintf(stdout, "---------------------------------\n");
+      fprintf(to, "CreatedAt: %" PRId64 ", DiedAt: %" PRId64 "\n", absl::ToUnixSeconds(res.metric.createdAt), absl::ToUnixSeconds(res.metric.diedAt));
+      fprintf(to, "---------------------------------\n");
     }
 
-    fprintf(stdout, "=================================\n");
+    fprintf(to, "=================================\n");
   }
 
   Profiler::TaskState Profiler::getStateFromString(std::string_view state)

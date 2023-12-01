@@ -47,7 +47,7 @@ namespace ghost
             void updateState(const Profiler::TaskState newState);
         };
         void update(Gtid gtid, std::string_view newState);
-        void PrintResults();
+        void PrintResults(FILE *to);
 
     private:
         static TaskState getStateFromString(std::string_view state);
