@@ -100,6 +100,8 @@ namespace ghost
       return Profiler::TaskState::kOnCpu;
     else if (state == "yielding")
       return Profiler::TaskState::kYielding;
+    else if (state == "Died")
+      return Profiler::TaskState::kDied;
     else
     {
       fprintf(stderr, "Task state is unknown(%s)\n", state.data());

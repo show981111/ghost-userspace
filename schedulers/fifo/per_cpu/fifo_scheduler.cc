@@ -162,11 +162,13 @@ void FifoScheduler::TaskDeparted(FifoTask* task, const Message& msg) {
     enclave()->GetAgent(cpu)->Ping();
   }
 
+  this->profiler->update(task->gtid, "Died");
   allocator()->FreeTask(task);
 }
 
 void FifoScheduler::TaskDead(FifoTask* task, const Message& msg) {
   CHECK(task->blocked());
+  this->profiler->update(task->gtid, "Died");
   allocator()->FreeTask(task);
 }
 
