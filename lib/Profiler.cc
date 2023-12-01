@@ -41,8 +41,8 @@ namespace ghost
 
     if (state == TaskState::kDied)
     {
-      printf("Thread Died\n");
-      results.push_back(Profiler::Result{gtid, metrics[rawTid]});
+      printf("Thread Died %ld, %ld\n", rawTid, metrics[rawTid].onCpuTime);
+      results.push_back(Profiler::Result{rawTid, metrics[rawTid]});
       metrics.erase(rawTid);
     }
     m.unlock();
@@ -62,10 +62,10 @@ namespace ghost
     // TaskState currentState;
     // absl::Time stateStarted;
     fprintf(to, "=================================\n");
-
+    fprintf(to, "=============== Metrics %d ==================\n", metrics.size());
     for (auto &[gtid, m] : metrics)
     {
-      fprintf(to, "Ghost Thread Id: %" PRId64 "\n", gtid);
+      fprintf(to, "Ghost Thread Id: %ld\n", gtid);
       //    time_t unixTime = absl::ToUnixSeconds(currentTime);
       fprintf(to, "BlockTime: %" PRId64 "\nRunnableTime: %" PRId64 "\nQueuedTime: %" PRId64 "\nonCpuTime: %" PRId64 "\nyieldingTime: %" PRId64 "\n",
               absl::ToInt64Nanoseconds(m.blockTime), absl::ToInt64Nanoseconds(m.runnableTime), absl::ToInt64Nanoseconds(m.queuedTime),
@@ -73,10 +73,10 @@ namespace ghost
       fprintf(to, "CreatedAt: %" PRId64 ", DiedAt: %" PRId64 "\n", absl::ToUnixSeconds(m.createdAt), absl::ToUnixSeconds(m.diedAt));
       fprintf(to, "---------------------------------\n");
     }
-
+    fprintf(to, "=============== Results %d ==================\n", results.size());
     for (auto &res : results)
     {
-      fprintf(to, "Ghost Thread Id: %" PRId64 "\n", res.gtid.id());
+      fprintf(to, "Ghost Thread Id: %ld\n", res.tid);
       //    time_t unixTime = absl::ToUnixSeconds(currentTime);
       fprintf(to, "BlockTime: %" PRId64 "\nRunnableTime: %" PRId64 "\nQueuedTime: %" PRId64 "\nonCpuTime: %" PRId64 "\nyieldingTime: %" PRId64 "\n",
               absl::ToInt64Nanoseconds(res.metric.blockTime), absl::ToInt64Nanoseconds(res.metric.runnableTime), absl::ToInt64Nanoseconds(res.metric.queuedTime),

@@ -55,7 +55,7 @@ namespace ghost
 
         struct Result
         {
-            Gtid gtid;
+            int64_t tid;
             Metric metric;
         };
 
