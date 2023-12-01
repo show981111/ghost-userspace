@@ -64,7 +64,7 @@ namespace ghost
 
     for (auto &[gtid, m] : metrics)
     {
-      fprintf(to, "Ghost Thread Id: %" PRId64 "\n", gtid.id());
+      fprintf(to, "Ghost Thread Id: %" PRId64 "\n", gtid);
       //    time_t unixTime = absl::ToUnixSeconds(currentTime);
       fprintf(to, "BlockTime: %" PRId64 "\nRunnableTime: %" PRId64 "\nQueuedTime: %" PRId64 "\nonCpuTime: %" PRId64 "\nyieldingTime: %" PRId64 "\n",
               absl::ToInt64Nanoseconds(m.blockTime), absl::ToInt64Nanoseconds(m.runnableTime), absl::ToInt64Nanoseconds(m.queuedTime),
