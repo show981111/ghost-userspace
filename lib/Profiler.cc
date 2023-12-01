@@ -41,6 +41,7 @@ namespace ghost
 
     if (state == TaskState::kDied)
     {
+      printf("Thread Died\n");
       results.push_back(Profiler::Result{gtid, metrics[rawTid]});
       metrics.erase(rawTid);
     }

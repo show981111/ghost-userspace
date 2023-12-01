@@ -64,9 +64,6 @@ int main(int argc, char* argv[]) {
   // manually flush `stdout`.
   fflush(stdout);
 
-  sleep(15);
-  profiler->PrintResults(stdout);
-
   ghost::Notification exit;
   ghost::GhostSignals::AddHandler(SIGINT, [&exit](int) {
     static bool first = true;  // We only modify the first SIGINT.
@@ -90,6 +87,7 @@ int main(int argc, char* argv[]) {
   delete profiler;
   delete uap;
 
+  profiler->PrintResults(stdout);
   printf("\nDone!\n");
 
   return 0;
